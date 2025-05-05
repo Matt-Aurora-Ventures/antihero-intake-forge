@@ -4,7 +4,7 @@ import IntakeForm from "@/components/IntakeForm";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-antihero pb-10">
+    <div className="min-h-screen bg-interactive pb-10">
       <header className="py-6 mb-6 bg-antihero border-b border-antihero-muted">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-center text-white">Antihero Fitness Intake Form</h1>

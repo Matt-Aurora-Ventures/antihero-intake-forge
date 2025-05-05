@@ -17,7 +17,6 @@ interface FormData {
   medicalAilments: string;
   undiscussedConditions: string;
   healthConcerns: string;
-  disclaimer1: boolean;
   foodIntake: string;
   waterIntake: string;
   foodPreferences: string;
@@ -28,7 +27,7 @@ interface FormData {
   alcoholSmoke: string;
   exercisePreferences: string;
   additionalInfo: string;
-  disclaimer2: boolean;
+  disclaimer: boolean;
 }
 
 const IntakeForm = () => {
@@ -42,7 +41,6 @@ const IntakeForm = () => {
     medicalAilments: "",
     undiscussedConditions: "",
     healthConcerns: "",
-    disclaimer1: false,
     foodIntake: "",
     waterIntake: "",
     foodPreferences: "",
@@ -53,7 +51,7 @@ const IntakeForm = () => {
     alcoholSmoke: "",
     exercisePreferences: "",
     additionalInfo: "",
-    disclaimer2: false,
+    disclaimer: false,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -90,17 +88,8 @@ const IntakeForm = () => {
         });
         return;
       }
-    } else if (currentStep === 2) {
-      if (!formData.disclaimer1) {
-        toast({
-          title: "Disclaimer Required",
-          description: "Please acknowledge the disclaimer to continue",
-          variant: "destructive",
-        });
-        return;
-      }
     } else if (currentStep === 4) {
-      if (!formData.disclaimer2) {
+      if (!formData.disclaimer) {
         toast({
           title: "Disclaimer Required",
           description: "Please acknowledge the disclaimer to continue",
@@ -128,7 +117,7 @@ const IntakeForm = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.disclaimer2) {
+    if (!formData.disclaimer) {
       toast({
         title: "Disclaimer Required",
         description: "Please acknowledge the disclaimer to continue",
@@ -177,7 +166,7 @@ const IntakeForm = () => {
         <img 
           src="/lovable-uploads/16afe8ab-0351-4dbc-8339-aa2b0d957741.png" 
           alt="Antihero Fitness" 
-          className="h-20 w-20"
+          className="h-20 w-20 animate-float"
         />
       </div>
 
@@ -194,7 +183,7 @@ const IntakeForm = () => {
 
       {/* Form Cards */}
       {currentStep === 1 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 1: Basic Information</CardTitle>
             <CardDescription className="text-gray-300">
@@ -256,11 +245,11 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 2 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 2: Medical & Legal</CardTitle>
             <CardDescription className="text-gray-300">
-              Please answer the following questions about your health and acknowledge the disclaimer.
+              Please answer the following questions about your health.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -297,22 +286,6 @@ const IntakeForm = () => {
                 className="bg-antihero border-antihero-muted"
               />
             </div>
-            <div className="mt-6 p-4 bg-antihero rounded-md border border-antihero-muted">
-              <p className="font-semibold mb-2">Disclaimer:</p>
-              <p className="text-sm mb-4">
-                I am not a medical doctor. My fitness knowledge is based on 25 years of personal experience. Please do not rely on my advice over that of a qualified medical or fitness practitioner. Always seek professional medical advice when in doubt. By continuing, you acknowledge the risks associated with physical activity and agree that I am not personally liable for any injuries.
-              </p>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="disclaimer1"
-                  checked={formData.disclaimer1}
-                  onCheckedChange={(checked) => handleCheckboxChange("disclaimer1", checked === true)}
-                />
-                <Label htmlFor="disclaimer1" className="font-semibold">
-                  Do you acknowledge and accept this disclaimer?
-                </Label>
-              </div>
-            </div>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" onClick={prevStep}>Previous</Button>
@@ -322,7 +295,7 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 3 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 3: Nutrition</CardTitle>
             <CardDescription className="text-gray-300">
@@ -399,7 +372,7 @@ const IntakeForm = () => {
             <div className="space-y-2 mt-4">
               <Label htmlFor="photoUpload">(Optional) Please upload a recent photo of yourself, either with a T-shirt or without (if comfortable).</Label>
               <div className="flex items-center gap-4">
-                <label htmlFor="photoUpload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-antihero hover:bg-antihero-muted border-antihero-muted">
+                <label htmlFor="photoUpload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-antihero hover:bg-antihero-muted border-antihero-muted transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-8 h-8 mb-2" />
                     <p className="mb-2 text-sm text-center">
@@ -431,7 +404,7 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 4 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 4: Preferences</CardTitle>
             <CardDescription className="text-gray-300">
@@ -477,14 +450,15 @@ const IntakeForm = () => {
               <p className="text-sm mb-4">
                 I am not a medical doctor. My fitness knowledge is based on 25 years of personal experience. Please do not rely on my advice over that of a qualified medical or fitness practitioner. Always seek professional medical advice when in doubt. By continuing, you acknowledge the risks associated with physical activity and agree that I am not personally liable for any injuries.
               </p>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 disclaimer-subtle">
                 <Checkbox
-                  id="disclaimer2"
-                  checked={formData.disclaimer2}
-                  onCheckedChange={(checked) => handleCheckboxChange("disclaimer2", checked === true)}
+                  id="disclaimer"
+                  className="disclaimer-checkbox"
+                  checked={formData.disclaimer}
+                  onCheckedChange={(checked) => handleCheckboxChange("disclaimer", checked === true)}
                 />
-                <Label htmlFor="disclaimer2" className="font-semibold">
-                  Do you acknowledge and accept this disclaimer?
+                <Label htmlFor="disclaimer" className="disclaimer-label text-gray-300 hover:text-white transition-colors">
+                  I acknowledge and accept this disclaimer
                 </Label>
               </div>
             </div>
@@ -497,7 +471,7 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 5 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Review & Submit</CardTitle>
             <CardDescription className="text-gray-300">
@@ -534,13 +508,13 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 6 && (
-        <Card className="mb-8 bg-antihero-accent text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Thank You!</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center py-10">
-              <div className="mb-6 text-6xl">🎉</div>
+              <div className="mb-6 text-6xl animate-float">🎉</div>
               <h3 className="text-xl font-bold mb-4">Form Submitted Successfully</h3>
               <p className="mb-6">
                 Thank you for completing the Antihero Fitness intake form. We've sent a confirmation email to your address.
