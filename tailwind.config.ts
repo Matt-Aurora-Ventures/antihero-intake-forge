@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -29,10 +28,10 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				antihero: {
-					DEFAULT: '#222222',
+					DEFAULT: '#111111',
 					foreground: '#FFFFFF',
-					accent: '#444444',
-					muted: '#555555',
+					accent: '#222222',
+					muted: '#333333',
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -111,6 +110,7 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse': 'pulse 3s infinite',
 				'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
 				'float': 'float 6s ease-in-out infinite',
 				'shimmer': 'shimmer 8s ease-in-out infinite'

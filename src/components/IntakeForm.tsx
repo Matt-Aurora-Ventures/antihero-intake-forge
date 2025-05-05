@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Mail, Printer } from "lucide-react";
+import { Upload, Mail, Printer, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface FormData {
   fullName: string;
@@ -78,23 +77,28 @@ const IntakeForm = () => {
     }
   };
 
+  // Modified to allow skipping steps without validation
   const nextStep = () => {
-    if (currentStep === 1) {
+    // Only validate on final submission
+    if (currentStep === 5) {
+      // Check all required fields
       if (!formData.fullName || !formData.email || !formData.phone) {
         toast({
           title: "Missing information",
-          description: "Please fill in all required fields",
+          description: "Please fill in all required fields in Step 1",
           variant: "destructive",
         });
+        setCurrentStep(1); // Return to first step
         return;
       }
-    } else if (currentStep === 4) {
+      
       if (!formData.disclaimer) {
         toast({
           title: "Disclaimer Required",
-          description: "Please acknowledge the disclaimer to continue",
+          description: "Please acknowledge the disclaimer in Step 4",
           variant: "destructive",
         });
+        setCurrentStep(4); // Return to disclaimer step
         return;
       }
     }
@@ -117,18 +121,29 @@ const IntakeForm = () => {
   };
 
   const handleSubmit = async () => {
+    // Validate all required fields before submission
+    if (!formData.fullName || !formData.email || !formData.phone) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields in Step 1",
+        variant: "destructive",
+      });
+      setCurrentStep(1);
+      return;
+    }
+    
     if (!formData.disclaimer) {
       toast({
         title: "Disclaimer Required",
         description: "Please acknowledge the disclaimer to continue",
         variant: "destructive",
       });
+      setCurrentStep(4);
       return;
     }
 
     try {
       // This is a simulated email send - in a real app you would connect to a backend service
-      // We're simulating the process since we don't have a backend set up
       toast({
         title: "Form Submitted!",
         description: "Your information has been sent. We'll be in touch soon!",
@@ -149,13 +164,13 @@ const IntakeForm = () => {
     <div className="max-w-4xl mx-auto p-4">
       {/* Progress bar */}
       <div className="mb-8 no-print">
-        <div className="h-2 bg-antihero-muted rounded-full mb-2">
+        <div className="h-2 bg-gray-800 rounded-full mb-2">
           <div
             className="h-full bg-white rounded-full transition-all duration-500"
             style={{ width: `${((currentStep - 1) / 5) * 100}%` }}
           ></div>
         </div>
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-sm text-white">
           <span>Step {currentStep} of 5</span>
           <span>{currentStep === 6 ? "Complete" : `${Math.round(((currentStep - 1) / 5) * 100)}%`}</span>
         </div>
@@ -170,11 +185,11 @@ const IntakeForm = () => {
         />
       </div>
 
-      {/* Print & Actions Button */}
+      {/* Print & Actions Button - Made more visible */}
       <div className="flex justify-end mb-4 no-print">
         <Button 
           variant="outline" 
-          className="mr-2" 
+          className="mr-2 border-white text-white hover:bg-white hover:text-black transition-colors" 
           onClick={printForm}
         >
           <Printer className="mr-2 h-4 w-4" /> Print Form
@@ -183,7 +198,7 @@ const IntakeForm = () => {
 
       {/* Form Cards */}
       {currentStep === 1 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 1: Basic Information</CardTitle>
             <CardDescription className="text-gray-300">
@@ -199,7 +214,7 @@ const IntakeForm = () => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Your full name"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -211,7 +226,7 @@ const IntakeForm = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="your.email@example.com"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -222,7 +237,7 @@ const IntakeForm = () => {
                 value={formData.phone}
                 onChange={handleInputChange}
                 placeholder="Your phone number"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -233,19 +248,24 @@ const IntakeForm = () => {
                 value={formData.preferredContact}
                 onChange={handleInputChange}
                 placeholder="Other contact methods (optional)"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
-            <p className="text-sm text-gray-300 italic">Your information will be kept confidential.</p>
+            <p className="text-sm text-gray-400 italic">Your information will be kept confidential.</p>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button onClick={nextStep}>Next</Button>
+            <Button 
+              onClick={nextStep}
+              className="bg-white text-black hover:bg-gray-200 transition-colors"
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
           </CardFooter>
         </Card>
       )}
 
       {currentStep === 2 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 2: Medical & Legal</CardTitle>
             <CardDescription className="text-gray-300">
@@ -261,7 +281,7 @@ const IntakeForm = () => {
                 value={formData.medicalAilments}
                 onChange={handleInputChange}
                 placeholder="Please describe any medical conditions"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -272,7 +292,7 @@ const IntakeForm = () => {
                 value={formData.undiscussedConditions}
                 onChange={handleInputChange}
                 placeholder="List any undiscussed conditions"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -283,19 +303,30 @@ const IntakeForm = () => {
                 value={formData.healthConcerns}
                 onChange={handleInputChange}
                 placeholder="List any health concerns"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={prevStep}>Previous</Button>
-            <Button onClick={nextStep}>Next</Button>
+            <Button 
+              variant="outline" 
+              onClick={prevStep}
+              className="border-white text-white hover:bg-white hover:text-black transition-colors"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+            </Button>
+            <Button 
+              onClick={nextStep}
+              className="bg-white text-black hover:bg-gray-200 transition-colors"
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
           </CardFooter>
         </Card>
       )}
 
       {currentStep === 3 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 3: Nutrition</CardTitle>
             <CardDescription className="text-gray-300">
@@ -311,7 +342,7 @@ const IntakeForm = () => {
                 value={formData.foodIntake}
                 onChange={handleInputChange}
                 placeholder="Describe your daily food intake"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -322,7 +353,7 @@ const IntakeForm = () => {
                 value={formData.waterIntake}
                 onChange={handleInputChange}
                 placeholder="Daily water intake"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -333,7 +364,7 @@ const IntakeForm = () => {
                 value={formData.foodPreferences}
                 onChange={handleInputChange}
                 placeholder="List your food preferences"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -344,7 +375,7 @@ const IntakeForm = () => {
                 value={formData.dietaryRestrictions}
                 onChange={handleInputChange}
                 placeholder="List any dietary restrictions"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -355,7 +386,7 @@ const IntakeForm = () => {
                 value={formData.calorieIntake}
                 onChange={handleInputChange}
                 placeholder="Current calorie or macronutrient intake"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -366,13 +397,13 @@ const IntakeForm = () => {
                 value={formData.typicalDay}
                 onChange={handleInputChange}
                 placeholder="Describe a typical day of eating and drinking"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2 mt-4">
               <Label htmlFor="photoUpload">(Optional) Please upload a recent photo of yourself, either with a T-shirt or without (if comfortable).</Label>
               <div className="flex items-center gap-4">
-                <label htmlFor="photoUpload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-antihero hover:bg-antihero-muted border-antihero-muted transition-colors">
+                <label htmlFor="photoUpload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-black hover:bg-gray-900 border-gray-700 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-8 h-8 mb-2" />
                     <p className="mb-2 text-sm text-center">
@@ -397,14 +428,25 @@ const IntakeForm = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={prevStep}>Previous</Button>
-            <Button onClick={nextStep}>Next</Button>
+            <Button 
+              variant="outline" 
+              onClick={prevStep}
+              className="border-white text-white hover:bg-white hover:text-black transition-colors"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+            </Button>
+            <Button 
+              onClick={nextStep}
+              className="bg-white text-black hover:bg-gray-200 transition-colors"
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
           </CardFooter>
         </Card>
       )}
 
       {currentStep === 4 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">STEP 4: Preferences</CardTitle>
             <CardDescription className="text-gray-300">
@@ -420,7 +462,7 @@ const IntakeForm = () => {
                 value={formData.alcoholSmoke}
                 onChange={handleInputChange}
                 placeholder="Alcohol and smoking habits"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -431,7 +473,7 @@ const IntakeForm = () => {
                 value={formData.exercisePreferences}
                 onChange={handleInputChange}
                 placeholder="Exercise preferences"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -442,36 +484,47 @@ const IntakeForm = () => {
                 value={formData.additionalInfo}
                 onChange={handleInputChange}
                 placeholder="Additional information"
-                className="bg-antihero border-antihero-muted"
+                className="bg-black border-gray-700 text-white"
               />
             </div>
-            <div className="mt-6 p-4 bg-antihero rounded-md border border-antihero-muted">
+            <div className="mt-6 p-4 bg-black rounded-md border border-gray-700">
               <p className="font-semibold mb-2">Disclaimer:</p>
-              <p className="text-sm mb-4">
+              <p className="text-sm mb-4 text-gray-300">
                 I am not a medical doctor. My fitness knowledge is based on 25 years of personal experience. Please do not rely on my advice over that of a qualified medical or fitness practitioner. Always seek professional medical advice when in doubt. By continuing, you acknowledge the risks associated with physical activity and agree that I am not personally liable for any injuries.
               </p>
               <div className="flex items-center space-x-2 disclaimer-subtle">
                 <Checkbox
                   id="disclaimer"
-                  className="disclaimer-checkbox"
+                  className="disclaimer-checkbox opacity-70"
                   checked={formData.disclaimer}
                   onCheckedChange={(checked) => handleCheckboxChange("disclaimer", checked === true)}
                 />
-                <Label htmlFor="disclaimer" className="disclaimer-label text-gray-300 hover:text-white transition-colors">
+                <Label htmlFor="disclaimer" className="disclaimer-label text-gray-500 hover:text-white transition-colors cursor-pointer">
                   I acknowledge and accept this disclaimer
                 </Label>
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={prevStep}>Previous</Button>
-            <Button onClick={nextStep}>Next</Button>
+            <Button 
+              variant="outline" 
+              onClick={prevStep}
+              className="border-white text-white hover:bg-white hover:text-black transition-colors"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+            </Button>
+            <Button 
+              onClick={nextStep}
+              className="bg-white text-black hover:bg-gray-200 transition-colors"
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
           </CardFooter>
         </Card>
       )}
 
       {currentStep === 5 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Review & Submit</CardTitle>
             <CardDescription className="text-gray-300">
@@ -491,16 +544,25 @@ const IntakeForm = () => {
               You can print this form using the print button at the top of the page.
             </p>
             
-            <div className="mt-6 p-4 bg-antihero rounded-md border border-antihero-muted">
+            <div className="mt-6 p-4 bg-black rounded-md border border-gray-700">
               <p className="font-semibold mb-2">One last check:</p>
-              <p className="text-sm mb-4">
+              <p className="text-sm mb-4 text-gray-300">
                 Have you reviewed all your answers and made sure they're complete and accurate?
               </p>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={prevStep}>Previous</Button>
-            <Button onClick={handleSubmit} className="bg-white text-antihero hover:bg-gray-200">
+            <Button 
+              variant="outline" 
+              onClick={prevStep}
+              className="border-white text-white hover:bg-white hover:text-black transition-colors"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+            </Button>
+            <Button 
+              onClick={handleSubmit} 
+              className="bg-white text-black hover:bg-gray-200 transition-colors"
+            >
               <Mail className="mr-2 h-4 w-4" /> Submit Form
             </Button>
           </CardFooter>
@@ -508,7 +570,7 @@ const IntakeForm = () => {
       )}
 
       {currentStep === 6 && (
-        <Card className="mb-8 bg-antihero-accent pulse-card text-white border-0 shadow-lg">
+        <Card className="mb-8 bg-antihero pulse-card text-white border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Thank You!</CardTitle>
           </CardHeader>
@@ -516,14 +578,14 @@ const IntakeForm = () => {
             <div className="text-center py-10">
               <div className="mb-6 text-6xl animate-float">🎉</div>
               <h3 className="text-xl font-bold mb-4">Form Submitted Successfully</h3>
-              <p className="mb-6">
+              <p className="mb-6 text-gray-300">
                 Thank you for completing the Antihero Fitness intake form. We've sent a confirmation email to your address.
                 We'll be in touch shortly to discuss the next steps in your fitness journey.
               </p>
               <Button 
                 onClick={printForm} 
                 variant="outline" 
-                className="no-print"
+                className="no-print border-white text-white hover:bg-white hover:text-black transition-colors"
               >
                 <Printer className="mr-2 h-4 w-4" /> Print Your Submission
               </Button>
