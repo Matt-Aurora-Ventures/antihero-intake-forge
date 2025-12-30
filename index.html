@@ -7,26 +7,162 @@
     <title>Antihero Fitness Intake Form</title>
     <meta name="description" content="Fitness intake form for Antihero Fitness" />
     <meta name="author" content="Antihero Fitness" />
-
     <meta property="og:title" content="Antihero Fitness Intake Form" />
     <meta property="og:description" content="Complete your fitness intake information for Antihero Fitness" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    
-    <!-- Adding Poppins font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/site/styles.css" />
   </head>
 
   <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="page">
+      <div class="background">
+        <span class="orb orb--sm"></span>
+        <span class="orb orb--md"></span>
+        <span class="orb orb--lg"></span>
+        <span class="orb orb--xl"></span>
+        <span class="orb orb--xxl"></span>
+      </div>
+      <div class="grid-overlay" aria-hidden="true"></div>
+
+      <header class="site-header">
+        <div class="container">
+          <h1>Antihero Fitness Intake Form</h1>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="card logo-card">
+          <img src="/site/assets/antihero-logo.png" alt="Antihero Fitness logo" />
+        </section>
+
+        <section class="card intro-card">
+          <p>
+            Complete the intake form below. This page is a static HTML5 experience with no CMS or theme
+            dependencies.
+          </p>
+        </section>
+
+        <form class="form-card card">
+          <section>
+            <h2>Contact Details</h2>
+            <div class="field-grid">
+              <label class="field">
+                Full name *
+                <input type="text" name="fullName" required />
+              </label>
+              <label class="field">
+                Email address *
+                <input type="email" name="email" required />
+              </label>
+              <label class="field">
+                Phone number *
+                <input type="tel" name="phone" required />
+              </label>
+              <label class="field">
+                Preferred contact method
+                <input type="text" name="preferredContact" />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h2>Health Overview</h2>
+            <div class="field-grid">
+              <label class="field">
+                Medical ailments or diagnoses
+                <textarea name="medicalAilments" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Conditions not yet discussed
+                <textarea name="undiscussedConditions" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Current health concerns
+                <textarea name="healthConcerns" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Alcohol or tobacco use
+                <input type="text" name="alcoholSmoke" />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h2>Nutrition & Hydration</h2>
+            <div class="field-grid">
+              <label class="field">
+                Typical food intake
+                <textarea name="foodIntake" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Daily water intake
+                <input type="text" name="waterIntake" />
+              </label>
+              <label class="field">
+                Food preferences
+                <textarea name="foodPreferences" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Dietary restrictions
+                <textarea name="dietaryRestrictions" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Estimated daily calories
+                <input type="text" name="calorieIntake" />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h2>Lifestyle & Training</h2>
+            <div class="field-grid">
+              <label class="field">
+                Typical day (work, sleep, stress)
+                <textarea name="typicalDay" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Exercise preferences
+                <textarea name="exercisePreferences" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Additional information
+                <textarea name="additionalInfo" rows="4"></textarea>
+              </label>
+              <label class="field">
+                Optional photo
+                <input type="file" name="photo" accept="image/*" />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h2>Disclaimer</h2>
+            <p class="disclaimer">
+              I acknowledge that the information provided is accurate to the best of my knowledge and
+              understand that this intake form is used to tailor my coaching experience.
+            </p>
+            <label class="checkbox-field">
+              <input type="checkbox" name="disclaimer" />
+              I agree to the disclaimer above.
+            </label>
+          </section>
+
+          <button type="submit" class="button button--primary">Submit</button>
+        </form>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container">
+          <p>© 2025 Antihero Fitness. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
